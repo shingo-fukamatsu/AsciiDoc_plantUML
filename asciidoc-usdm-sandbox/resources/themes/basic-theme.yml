@@ -1,0 +1,12 @@
+extends: default-with-font-fallbacks # asciidoctor-pdfの標準テーマ "default-with-font-fallbacks-theme.yml" を継承する。
+font:
+  catalog:
+    merge: true
+    # ダウンロードしたフォントをKaiGenGothicJPとして登録する。
+    KaiGenGothicJP:
+      normal: KaiGenGothicJP-Regular.ttf
+      bold: KaiGenGothicJP-Bold.ttf
+      italic: KaiGenGothicJP-Regular-Italic.ttf
+      bold_italic: KaiGenGothicJP-Bold-Italic.ttf
+base:
+  font_family: KaiGenGothicJP  # KaiGenGothicJPを基本フォントとして利用する。
