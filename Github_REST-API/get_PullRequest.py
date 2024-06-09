@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 from pprint import pprint
 
 #リポジトリの設定
@@ -8,7 +9,13 @@ AUTH = 'token {}'
 headers = {'Authorization': AUTH.format(os.getenv('GITHUB_ACCESS_TOKEN'))}
 
 # openのPRを取得
-r = requests.get(URL.format('pulls?&state=open'), headers=headers)
+#r = requests.get(URL.format('pulls?&state=open'), headers=headers)
+r = requests.get(URL.format('pulls?&state=close'), headers=headers)
+
+# JSONファイルとして保存
+with open('r.json', 'w', encoding='utf-8') as f:
+    json.dump(r.json(), f, ensure_ascii=False, indent=4)
+
 pprint (r.json())
 pprint ("-----------------------------------------------")
 
