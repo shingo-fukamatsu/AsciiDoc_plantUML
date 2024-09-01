@@ -1,5 +1,3 @@
-:toc: left
-
 ### <要求グループ>
 ****
 :id: SYSRQx-xxx
