@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4 #アクションの呼び出し
+                                  #ワークフローをトリガにしたリポジトリとブランチのみチェックアウトする
       - run: |
           ls -a
           echo "" 
