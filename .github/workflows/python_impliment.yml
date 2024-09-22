@@ -1,0 +1,17 @@
+name: PythonImpliment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: #手動実行
+
+jobs:
+  PythonHelloWorld:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 #アクションの呼び出し
+      - run: |
+          ls -a
+          echo "" 
+          git branch -a

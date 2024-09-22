@@ -1,0 +1,15 @@
+= pythonをgithub actionsで実行する
+
+== 手順
+* 事前
+** pythonファイルを任意のリポジトリにコミットする
+* workflowで実施する内容
+** pythonファイルがあるリポジトリをcloneする +
+```
+uses: actions/checkout@v4
+```
+** cloneしたpythonファイルを実行する
+
+
+
+
