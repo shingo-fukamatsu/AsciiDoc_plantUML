@@ -14,4 +14,5 @@ jobs:
           ls -a
           echo "" 
           git branch -a
+      - run: pip install requests
       - run: python ./tools/hellow.py
