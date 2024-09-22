@@ -15,3 +15,4 @@ jobs:
           ls -a
           echo "" 
           git branch -a
+      - run: python ./tools/hellow.py
