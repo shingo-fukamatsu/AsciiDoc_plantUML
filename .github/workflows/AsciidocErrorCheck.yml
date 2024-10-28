@@ -10,3 +10,4 @@ jobs:
     steps:
       - run: gem install asciidoctor
       - run: asciidoctor --version
+      - run: python ./tools/hellow.py
