@@ -10,4 +10,10 @@ jobs:
     steps:
       - run: gem install asciidoctor
       - run: asciidoctor --version
+
+      - uses: actions/checkout@v4
+      - run: |
+          ls -a
+          echo "" 
+          git branch -a
       - run: python ./tools/hellow.py
