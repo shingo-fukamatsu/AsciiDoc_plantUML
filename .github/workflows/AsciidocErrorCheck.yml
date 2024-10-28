@@ -1,0 +1,12 @@
+name: AsciidocErrorCheck
+
+on:
+  push:
+  workflow_dispatch: #手動実行
+
+jobs:
+  AsciidocErrorCheck:
+    runs-on: windows-latest
+    steps:
+      - run: gem install asciidoctor
+      - run: asciidoctor --version
