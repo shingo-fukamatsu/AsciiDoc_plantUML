@@ -13,7 +13,7 @@ jobs:
 
       - uses: actions/checkout@v4
       - run: |
-          ls -a
+          ls
           echo "" 
           git branch -a
       - run: python ./tools/hellow.py
