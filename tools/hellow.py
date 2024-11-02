@@ -1,2 +1,1 @@
-print("pythonが実行されました")
-print("GithubActionsでpythonを動かすことに成功しました")
+print("pytho impliment OK!")
