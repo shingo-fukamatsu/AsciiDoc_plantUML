@@ -10,7 +10,7 @@ jobs:
   html_spec_gh-pages:
     runs-on: windows-latest
     steps:
-      - uses: choco install ruby
+      - run: choco install ruby
       - run: gem install asciidoctor
       - uses: actions/checkout@v4 
       - run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc
