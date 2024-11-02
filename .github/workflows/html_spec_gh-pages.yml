@@ -1,0 +1,16 @@
+name: html_spec_gh-pages
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: #手動実行
+
+jobs:
+  html_spec_gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gem install asciidoctor
+      - uses: actions/checkout@v4 
+      - run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc
+      - run: python ./tools/hellow.py
