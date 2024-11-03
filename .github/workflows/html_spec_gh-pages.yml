@@ -24,7 +24,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      - name: Checkout gh-pages branch
+      - name: Checkout gh-pages branch and Merge main
         run: |
           git checkout gh-pages || git checkout --orphan gh-pages
           git merge main --no-edit
