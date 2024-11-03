@@ -16,9 +16,9 @@ jobs:
           gem install asciidoctor
       - name: Checkout main branch
         uses: actions/checkout@v4
-          with:
-            ref: main
-            fetch-depth: 0
+        with:
+          ref: main
+          fetch-depth: 0
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -27,16 +27,14 @@ jobs:
         run: |
           git checkout gh-pages || git checkout --orphan gh-pages
           git merge main --no-edit
-      - name : Convert Asciidoc to HTML
+      - name: Convert Asciidoc to HTML
         run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc
       - name: Commit HTML specification files
         run: |
-          git stage *.html
+          git add *.html
           git commit -m "Add HTML specification files"
       - name: Push changes
         run: |
           git push origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
-
