@@ -11,6 +11,11 @@ jobs:
   html_spec_gh-pages:
     runs-on: windows-latest
     steps:
+      - name: Post job summary
+        run: |
+          echo "## Example Title" >> $GITHUB_STEP_SUMMARY
+          echo "- first line" >> $GITHUB_STEP_SUMMARY
+          echo "- second line" >> $GITHUB_STEP_SUMMARY
       - name: Install asciidoctor
         run: | 
           choco install ruby
@@ -39,8 +44,3 @@ jobs:
           git push origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Post job summary
-        run: |
-          echo "## Example Title" >> $GITHUB_STEP_SUMMARY
-          echo "- first line" >> $GITHUB_STEP_SUMMARY
-          echo "- second line" >> $GITHUB_STEP_SUMMARY
