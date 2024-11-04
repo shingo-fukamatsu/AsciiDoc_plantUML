@@ -19,10 +19,10 @@ jobs:
       - name: Check log and post summary
         run: |
           if ((Get-Content log.txt).length -gt 0) {
-            echo "Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
+            echo "## Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
             Get-Content log.txt >> $env:GITHUB_STEP_SUMMARY
           } else {
-            echo "Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
-            echo "CHECK OK!" >> $env:GITHUB_STEP_SUMMARY
+            echo "## Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
+            echo "Asciidoctor CHECK OK!" >> $env:GITHUB_STEP_SUMMARY
           }
         shell: powershell
