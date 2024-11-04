@@ -1,0 +1,28 @@
+name: Check asciidoctor warning
+
+on:
+  push:
+  workflow_dispatch: # 手動実行
+
+jobs:
+  check_asciidoctor_warning:
+    runs-on: windows-latest
+    steps:
+      - name: Install asciidoctor
+        run: | 
+          choco install ruby
+          gem install asciidoctor
+      - name: Checkout work branch
+        uses: actions/checkout@v4
+      - name: Convert Asciidoc to HTML
+        run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc > log.txt
+      - name: Check log and post summary
+        run: |
+          if ((Get-Content log.txt).length -gt 0) {
+            echo "Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
+            Get-Content log.txt >> $env:GITHUB_STEP_SUMMARY
+          } else {
+            echo "Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
+            echo "WARNINGはありません" >> $env:GITHUB_STEP_SUMMARY
+          }
+        shell: powershell
