@@ -23,6 +23,6 @@ jobs:
             Get-Content log.txt >> $env:GITHUB_STEP_SUMMARY
           } else {
             echo "Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
-            echo "WARNINGはありません" >> $env:GITHUB_STEP_SUMMARY
+            echo "CHECK OK!" >> $env:GITHUB_STEP_SUMMARY
           }
         shell: powershell
