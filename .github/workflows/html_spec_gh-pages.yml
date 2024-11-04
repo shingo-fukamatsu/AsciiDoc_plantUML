@@ -40,6 +40,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          echo "Example Title :rocket:" >> "${GITHUB_STEP_SUMMARY}"
-          echo "- first line" >> "${GITHUB_STEP_SUMMARY}"
-          echo "- second line" >> "${GITHUB_STEP_SUMMARY}"
+          echo "Example Title :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- first line" >> $GITHUB_STEP_SUMMARY
+          echo "- second line" >> $GITHUB_STEP_SUMMARY
