@@ -15,12 +15,13 @@ jobs:
       - name: Checkout work branch
         uses: actions/checkout@v4
       - name: Convert Asciidoc to HTML
-        run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc > log.txt
+        run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc > log.txt 2>&1
       - name: Check log and post summary
         run: |
           if ((Get-Content log.txt).length -gt 0) {
             echo "## Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
             Get-Content log.txt >> $env:GITHUB_STEP_SUMMARY
+            exit 1
           } else {
             echo "## Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
             echo "Asciidoctor CHECK OK!" >> $env:GITHUB_STEP_SUMMARY
