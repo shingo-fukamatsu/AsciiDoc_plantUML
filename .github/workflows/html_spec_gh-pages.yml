@@ -39,7 +39,8 @@ jobs:
           git push origin gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: |
+      - name: Post job summary
+        run: |
           echo "Example Title :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- first line" >> $GITHUB_STEP_SUMMARY
           echo "- second line" >> $GITHUB_STEP_SUMMARY
