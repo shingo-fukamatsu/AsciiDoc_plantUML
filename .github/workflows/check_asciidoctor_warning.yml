@@ -21,9 +21,9 @@ jobs:
           if ((Get-Content log.txt).length -gt 0) {
             echo "## Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
             Get-Content log.txt >> $env:GITHUB_STEP_SUMMARY
+            exit 1
           } else {
             echo "## Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
             echo "Asciidoctor CHECK OK!" >> $env:GITHUB_STEP_SUMMARY
-            exit 1
           }
         shell: powershell
