@@ -24,5 +24,6 @@ jobs:
           } else {
             echo "## Log Summary :rocket:" >> $env:GITHUB_STEP_SUMMARY
             echo "Asciidoctor CHECK OK!" >> $env:GITHUB_STEP_SUMMARY
+            exit 1
           }
         shell: powershell
