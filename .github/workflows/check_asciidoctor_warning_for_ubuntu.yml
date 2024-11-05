@@ -1,0 +1,30 @@
+name: Check asciidoctor warning for ubuntu
+
+on:
+  push:
+  workflow_dispatch: # 手動実行
+
+jobs:
+  check_asciidoctor_warning:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install asciidoctor
+        run: | 
+          sudo apt update
+          sudo apt upgrade -y
+          sudo apt install -y ruby-full
+          gem install asciidoctor
+      - name: Checkout work branch
+        uses: actions/checkout@v4
+      - name: Convert Asciidoc to HTML
+        run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc > log.txt 2>&1
+      - name: Check log and post summary
+        run: |
+          if [ -s log.txt ]; then
+            echo "## Log Summary :rocket:" >> $GITHUB_STEP_SUMMARY
+            cat log.txt >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "## Log Summary :rocket:" >> $GITHUB_STEP_SUMMARY
+            echo "Asciidoctor CHECK OK!" >> $GITHUB_STEP_SUMMARY
+          fi
