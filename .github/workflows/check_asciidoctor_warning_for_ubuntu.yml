@@ -11,7 +11,6 @@ jobs:
       - name: Install asciidoctor
         run: | 
           sudo apt update
-          sudo apt upgrade -y
           sudo apt install -y ruby-full
           sudo gem install asciidoctor
       - name: Checkout work branch
@@ -26,5 +25,5 @@ jobs:
             exit 1
           else
             echo "## Log Summary :rocket:" >> $GITHUB_STEP_SUMMARY
-            echo "Asciidoctor CHECK OK!" >> $GITHUB_STEP_SUMMARY
+            echo "Asciidoctor check OK!" >> $GITHUB_STEP_SUMMARY
           fi
