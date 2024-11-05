@@ -1,0 +1,4 @@
+:toc: left
+
+:imagesdir: images
+include::asciidoctor-pdf-sandbox/tetoris_usdm.adoc[]

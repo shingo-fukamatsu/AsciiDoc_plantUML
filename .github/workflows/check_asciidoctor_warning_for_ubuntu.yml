@@ -16,7 +16,7 @@ jobs:
       - name: Checkout work branch
         uses: actions/checkout@v4
       - name: Convert Asciidoc to HTML
-        run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font AsciiDoc全体.adoc > log.txt 2>&1
+        run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font ./テスト/AsciiDoc全体.adoc
       - name: Check log and post summary
         run: |
           if [ -s log.txt ]; then
