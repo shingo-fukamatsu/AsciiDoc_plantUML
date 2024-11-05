@@ -8,11 +8,12 @@ on:
 
 jobs:
   html_spec_gh-pages:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Install asciidoctor
         run: | 
-          choco install ruby
+          sudo apt-get update
+          sudo apt-get install -y ruby-full
           gem install asciidoctor
       - name: Checkout main branch
         uses: actions/checkout@v4
