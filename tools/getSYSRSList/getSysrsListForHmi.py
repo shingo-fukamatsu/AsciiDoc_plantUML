@@ -15,6 +15,8 @@ def export_requirement_id_list_to_csv():
         for line in lines:
             if re.search(r":id:\s*SYSRS\d+-\d+", line):
                 extracted_lines.append(line)
+            elif re.search(r"\{id\}::", line):
+                extracted_lines.append(line)
             elif re.search(r"\{id\}-\d+.*::", line):
                 extracted_lines.append(line)
             elif re.search(r"\{id\}-\d+-\d+.*::", line):
@@ -26,18 +28,29 @@ def export_requirement_id_list_to_csv():
                 upper_id = re.search(r"SYSRS\d+-\d+", line).group()
             else:
                 extracted_lines[idx] = line.replace("{id}", upper_id)
-        for line in extracted_lines:
-            print(line)
 
         # 3.4	要求ID名に置換したリストから要求ID、HMI担当に依頼したいラベルを抽出し、CSVとして出力する
         output_data = []
         for line in extracted_lines:
             if ":id:" in line:
                 continue
-            req_id_match = re.search(r"SYSRS(\d+-\d+-\d+-\d+|-\d+-\d+|-\d+)", line)
-            req_id = req_id_match.group() if req_id_match else ""
-            hmi_label_match = re.search(r"\[HMI:(\d+|,|-)*\]", line)
-            hmi_label = hmi_label_match.group(1) if hmi_label_match else ""
+            # 出力用要求IDを抽出
+            req_id_patterns = [
+                r"SYSRS\d+-\d+-\d+-\d+",
+                r"SYSRS\d+-\d+-\d+",
+                r"SYSRS\d+-\d+"
+            ]
+            req_id = ""
+            for pattern in req_id_patterns:
+                req_id_match = re.search(pattern, line)
+                if req_id_match:
+                    req_id = req_id_match.group()
+                    break
+            # 出力用HMIラベルを抽出
+            hmi_label_match = re.search(r"\[HMI:.*\]", line)
+            hmi_label_tmp = hmi_label_match.group() if hmi_label_match else ""
+            hmi_label_tmp_matches = re.findall(r"\d+", hmi_label_tmp)
+            hmi_label = ",".join([f"disp{num}" for num in hmi_label_tmp_matches])
             output_data.append([req_id, hmi_label])
 
         csv_file = file.replace(".adoc", ".csv")
