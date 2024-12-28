@@ -1,4 +1,7 @@
 :toc: left
+:stylesheet: table-style-sheet.css
+:stylesdir: my-style-sheet
 
 :imagesdir: images
 include::asciidoctor-pdf-sandbox/tetoris_usdm.adoc[]
+include::asciidoc-usdm-sandbox/USDM_表形式.adoc[]
