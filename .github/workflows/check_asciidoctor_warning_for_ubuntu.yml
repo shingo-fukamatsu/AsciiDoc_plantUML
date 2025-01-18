@@ -10,8 +10,9 @@ jobs:
     steps:
       - name: Install ruby
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 'latest'
+      - name: ruby version check
+        run: |
+          ruby --version
       - name: Install asciidoctor
         run: | 
           # sudo apt update
