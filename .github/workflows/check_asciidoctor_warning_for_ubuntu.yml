@@ -6,7 +6,7 @@ on:
 
 jobs:
   check_asciidoctor_warning:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Install ruby
         uses: ruby/setup-ruby@v1
