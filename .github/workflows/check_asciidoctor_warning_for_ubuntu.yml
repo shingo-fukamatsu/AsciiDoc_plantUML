@@ -8,15 +8,19 @@ jobs:
   check_asciidoctor_warning:
     runs-on: ubuntu-20.04
     steps:
+      - name: Install ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 'latest'
       - name: Install asciidoctor
         run: | 
-          sudo apt update
-          sudo apt install -y ruby-full
+          # sudo apt update
+          # sudo apt install -y ruby-full
           sudo gem install asciidoctor
       - name: Checkout work branch
         uses: actions/checkout@v4
       - name: Convert Asciidoc to HTML
-        run: asciidoctor -a scripts=cjk -a pdf-theme=default-with-fallback-font ./テスト/AsciiDoc全体.adoc
+        run: asciidoctor -a scripts=cjk AsciiDoc全体.adoc > log.txt 2>&1
       - name: Check log and post summary
         run: |
           if [ -s log.txt ]; then

@@ -5,3 +5,4 @@
 :imagesdir: images
 include::asciidoctor-pdf-sandbox/tetoris_usdm.adoc[]
 include::asciidoc-usdm-sandbox/USDM_表形式.adoc[]
+include::日本語ファイルパス/日本語パスのファイル.adoc[]
