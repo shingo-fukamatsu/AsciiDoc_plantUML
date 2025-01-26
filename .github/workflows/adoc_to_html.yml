@@ -1,0 +1,38 @@
+name: convert adoc to html
+
+on:
+  push:
+  workflow_dispatch: # 手動実行
+
+jobs:
+  convert_adoc_to_html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.1'
+      - name: Install asciidoctor
+        run: | 
+          sudo gem install asciidoctor
+      - name: Checkout work branch
+        uses: actions/checkout@v4
+      - name: Convert Asciidoc to HTML
+        run: asciidoctor -a scripts=cjk AsciiDoc全体.adoc > log.txt 2>&1
+      - name: Check log and post summary
+        run: |
+          if [ -s log.txt ]; then
+            echo "## :x: Summary" >> $GITHUB_STEP_SUMMARY
+            cat log.txt >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo "## :heavy_check_mark: Summary" >> $GITHUB_STEP_SUMMARY
+            echo "Asciidoctor check OK!" >> $GITHUB_STEP_SUMMARY
+          fi
+      - name: Upload html
+        uses: actions/upload-artifact@v4
+        with:
+          name: AsciiDoc全体.html
+          path: AsciiDoc全体.html
+          retention-day: 1
+
