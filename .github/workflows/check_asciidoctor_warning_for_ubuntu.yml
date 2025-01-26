@@ -8,15 +8,18 @@ jobs:
   check_asciidoctor_warning:
     runs-on: ubuntu-latest
     steps:
-      - name: Install ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 'latest'
+#      - name: Install ruby
+#        uses: ruby/setup-ruby@v1
+#        with:
+#          ruby-version: '3.0.2' # 最新のRubyバージョンを指定
       - name: Install asciidoctor
         run: | 
-          # sudo apt update
-          # sudo apt install -y ruby-full
+          sudo apt update
+          sudo apt install -y ruby-full
           sudo gem install asciidoctor
+      - name: ruby version check
+        run: |
+          ruby --version
       - name: Checkout work branch
         uses: actions/checkout@v4
       - name: Convert Asciidoc to HTML
