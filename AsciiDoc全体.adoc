@@ -1,6 +1,8 @@
 :toc: left
-:stylesheet: table-style-sheet.css
-:stylesdir: my-style-sheet
+//:stylesheet: table-style-sheet.css
+//:stylesdir: my-style-sheet
+:docinfo: shared
+:docinfodir: ./docinfo
 
 :imagesdir: images
 include::asciidoctor-pdf-sandbox/tetoris_usdm.adoc[]
