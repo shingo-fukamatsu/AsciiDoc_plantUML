@@ -1,0 +1,84 @@
+@startuml voice command
+start
+'skinparam ConditionEndStyle hline
+
+:音声コマンドを認識;
+if(発話席) then (Rr席)
+    :この席からこの機能は使用できません;
+    stop
+else (Fr席)
+endif
+
+switch (発話内容)
+    case ()
+        partition <モード提案>{
+            if() then (休みたいな)
+                :雑談を実施。\nモード提案しない;
+                stop
+            else (疲れたな,\n盛り上がりたいな)
+                switch (モード提案)
+                    case (モード提案を許可)
+                        (A)
+                        detach
+                    case (モード提案を不許可,\n応答なし)
+                        stop
+                    case (提案したいモードが\n既に実行中)
+                        :「xxモードを\nしばらく続けましょう」と発話;
+                        stop
+                    case (提案したいモードが\n実行不可)
+                        :雑談を実施。\nモード提案しない;
+                        stop
+                endswitch
+            endif
+        }
+    case (xxモードON)
+        partition <モード開始>{
+            partition SYSRS***{
+                if(モード実行可否) then (可)
+                else(不可)
+                    :エラー応答文を発話;
+                    stop
+                endif
+            }
+            (A)
+            detach
+        }
+
+    case (xxモードOFF)
+        :xxモードを終了する;
+        stop
+endswitch
+
+(A)
+partition SYSRS*** {
+    if(バッテリ残容量) then (黄信号)
+        if(モード継続するか確認) then (継続を選択)
+        else (終了を選択\n応答なし)
+            stop
+        endif
+    else (青信号)
+    endif
+}
+partition SYSRS*** {
+    if(ディスプレイ格納状態)
+        if() then (半格納,\n半格納に稼働中)
+            if(全開にするか確認) then (不許可,応答なし)
+                stop
+            else (許可)
+                :全開にする;
+            endif
+        else (全開に稼働中)
+        endif
+        :全開になるまで待つ;
+    else (全開)
+    endif
+}
+partition SYSRS*** {
+    if(モード実行可否) then (不可)
+        :エラー応答分を発話;
+    else (可)
+        :モード実行;
+    endif
+}
+stop
+@enduml
