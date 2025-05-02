@@ -44,8 +44,8 @@ def convert_asciidoc_to_docx():
         messagebox.showerror("エラー", "Asciidocファイルを選択してください")
         return
     
-    html_path = adoc_path.replace(".adoc", ".html")
-    docx_path = adoc_path.replace(".adoc", ".docx")
+    html_path = adoc_path.replace(".adoc", "_base.html")
+    docx_path = adoc_path.replace(".adoc", "_base.docx")
 
     success_html = False
     success_docx = False
@@ -53,7 +53,9 @@ def convert_asciidoc_to_docx():
     # adocをHTMLに変換
     try:
         docinfo_path = create_docinfo_file(adoc_path) #HTMLの横幅を広くする設定ファイルを作成
-        subprocess.run(["asciidoctor", "-a", "scripts=cjk", "-a" , "docinfo=shared" , adoc_path], check=True, shell=True)
+        subprocess.run(["asciidoctor", "-a", "scripts=cjk", "-a" , "docinfo=shared" , adoc_path], check=True, shell=True) #HTML変換
+        html_path_tmp = adoc_path.replace(".adoc", ".html")
+        os.rename(html_path_tmp, html_path) #HTMLのファイル名を変更
         success_html = True
     except subprocess.CalledProcessError as e:
         messagebox.showerror("エラー", f"Asciidoc変換に失敗しました: {e}")
@@ -96,7 +98,7 @@ def compare_documents():
     # adocをHTMLに変換
     try:
         docinfo_path = create_docinfo_file(adoc_path) #HTMLの横幅を広くする設定ファイルを作成
-        subprocess.run(["asciidoctor", "-a", "scripts=cjk", adoc_path], check=True, shell=True)
+        subprocess.run(["asciidoctor", "-a", "scripts=cjk", "-a" , "docinfo=shared" ,adoc_path], check=True, shell=True)
     except subprocess.CalledProcessError as e:
         messagebox.showerror("エラー", f"Asciidoc変換に失敗しました: {e}")
         return
@@ -110,7 +112,7 @@ def compare_documents():
     word = win32com.client.Dispatch("Word.Application")
     word.Visible = False
 
-    new_doc_path = html_path.replace('.html', '_converted.docx')
+    new_doc_path = html_path.replace('.html', '.docx')
 
     try:
         # HTMLファイルをWordで開く
@@ -137,9 +139,9 @@ def compare_documents():
     finally:
         word.Quit()
 
-    # 一時ファイルを削除
-    if os.path.exists(new_doc_path):
-        os.remove(new_doc_path)
+        # 一時ファイルを削除
+        #if os.path.exists(new_doc_path):
+           # os.remove(new_doc_path)
 
 # GUIの作成
 root = tk.Tk()
@@ -148,7 +150,7 @@ root.geometry("550x350")
 
 # 文字やボタン等の配置
 # row=0
-tk.Label(root, text="Asciidocファイル:").grid(row=0, column=0, padx=10, pady=5)
+tk.Label(root, text="比較_ベースファイル(*.adoc):").grid(row=0, column=0, padx=10, pady=5)
 asciidoc_entry = tk.Entry(root, width=50)
 asciidoc_entry.grid(row=0, column=1)
 tk.Button(root, text="選択", command=lambda: select_file(asciidoc_entry, [("Asciidoc Files", "*.adoc")])).grid(row=0, column=2)
