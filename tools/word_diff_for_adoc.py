@@ -4,6 +4,11 @@ import win32com.client
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
+#【事前にインストールするもの】
+# pywin32とasciidoctorのインストールが必要です
+# ・pywin32のインストール方法：コマンドプロンプトで「pip install pywin32」を実行してください。※許可済みソフトです
+# ・asciidoctorのインストール方法：管理者に確認してください
+
 def select_file(entry_widget, file_types):
     """ファイル選択ダイアログ"""
     file_path = filedialog.askopenfilename(filetypes=file_types)
@@ -78,7 +83,7 @@ def convert_asciidoc_to_docx():
 
 def compare_documents():
     """HTMLとWordを比較。
-    adocをHTMLに変換し、さらにHTMLをWordに変換。その後、ベースのWordファイルと比較し、比較結果をWordファイルに出力する"""
+    adocをHTMLに変換し、さらにHTMLをWordに変換。その後、ベースのWordファイルと比較し、比較結果をWordファイルで出力する"""
     adoc_path = adoc_entry.get()
     old_doc_path = docx_entry.get()
     result_doc_path = result_entry.get()
@@ -141,6 +146,7 @@ root = tk.Tk()
 root.title(" Word ⇔ Asciidoc 比較ツール ")
 root.geometry("550x350")
 
+# 文字やボタン等の配置
 # row=0
 tk.Label(root, text="Asciidocファイル:").grid(row=0, column=0, padx=10, pady=5)
 asciidoc_entry = tk.Entry(root, width=50)
