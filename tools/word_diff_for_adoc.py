@@ -138,7 +138,7 @@ def compare_documents():
 
 # GUIの作成
 root = tk.Tk()
-root.title("Asciidoc ⇔ Word 比較ツール")
+root.title(" Word ⇔ Asciidoc 比較ツール ")
 root.geometry("550x350")
 
 # row=0
@@ -151,13 +151,13 @@ tk.Button(root, text="選択", command=lambda: select_file(asciidoc_entry, [("As
 tk.Button(root, text="HTMLとdocxに変換", command=convert_asciidoc_to_docx).grid(row=1, column=1, pady=5)
 
 # row=2
-tk.Label(root, text="比較_ベース Wordファイル:").grid(row=2, column=0, padx=10, pady=5)
+tk.Label(root, text="比較_ベースファイル(*.docx):").grid(row=2, column=0, padx=10, pady=5)
 docx_entry = tk.Entry(root, width=50)
 docx_entry.grid(row=2, column=1)
 tk.Button(root, text="選択", command=lambda: select_file(docx_entry, [("Word Files", "*.docx")])).grid(row=2, column=2)
 
 # row=3
-tk.Label(root, text="比較_変更後 adocファイル:").grid(row=3, column=0, padx=10, pady=5)
+tk.Label(root, text="比較_変更後ファイル(*.adoc):").grid(row=3, column=0, padx=10, pady=5)
 adoc_entry = tk.Entry(root, width=50)
 adoc_entry.grid(row=3, column=1)
 tk.Button(root, text="選択", command=lambda: select_file(adoc_entry, [("Asciidoc Files", "*.adoc")])).grid(row=3, column=2)
