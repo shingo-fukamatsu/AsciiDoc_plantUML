@@ -43,10 +43,10 @@ jobs:
           if [ ${#lines[@]} -gt 0 ]; then
             {
               echo "found=true"
-              echo "warnings<<'EOF'"
+              echo "warnings<<__WARNINGS__"
               echo "### 🚨 コミットメッセージ警告チェックリスト"
               printf '%s\n' "${lines[@]}"
-              echo "EOF"
+              echo "__WARNINGS__"
             } >> "$GITHUB_OUTPUT"
           else
             echo "found=false" >> "$GITHUB_OUTPUT"
@@ -58,7 +58,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
-          # --raw-field を使うと本文がそのまま送られ、改行も保持されます
+          # --raw-field を使うと改行を含む本文をそのまま送れます
           gh api repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
             --method POST \
             --raw-field body="${{ steps.check.outputs.warnings }}"
