@@ -31,20 +31,22 @@ jobs:
           warnings=""
 
           if grep -qi "WIP" commit_messages.txt; then
-            warnings="${warnings}⚠️ **警告:** コミットメッセージに 'WIP' が含まれています。作業途中のままではありませんか？%0A"
+            warnings="${warnings}- [ ] ⚠️ **WIP**: コミットメッセージに 'WIP' が含まれています。作業途中のままではありませんか？%0A"
           fi
 
           if grep -qi "FIXME" commit_messages.txt; then
-            warnings="${warnings}⚠️ **警告:** 'FIXME' が含まれています。修正漏れがないか確認してください。%0A"
+            warnings="${warnings}- [ ] ⚠️ **FIXME**: 'FIXME' が含まれています。修正漏れがないか確認してください。%0A"
           fi
 
           if grep -qi "temp" commit_messages.txt; then
-            warnings="${warnings}⚠️ **警告:** 'temp' が含まれています。一時的なコードやメッセージを削除してください。%0A"
+            warnings="${warnings}- [ ] ⚠️ **temp**: 'temp' が含まれています。一時的なコードやメッセージを削除してください。%0A"
           fi
 
           if [ -n "$warnings" ]; then
+            # 全体を整形して改行付き本文にする
+            body="### 🚨 コミットメッセージ警告チェックリスト%0A${warnings}"
             echo "found=true" >> $GITHUB_OUTPUT
-            echo "warnings=$warnings" >> $GITHUB_OUTPUT
+            echo "warnings=$body" >> $GITHUB_OUTPUT
           else
             echo "found=false" >> $GITHUB_OUTPUT
           fi
