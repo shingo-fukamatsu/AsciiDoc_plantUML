@@ -4,28 +4,31 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pull-requests: write   # PRにコメントするのに必要
+  issues: write          # 念のため（コメントAPIはissuesスコープ）
+
 jobs:
   check_commits:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Get PR commits
         id: commits
+        env:
+          GH_TOKEN: ${{ github.token }}   # ← これがポイント
         run: |
-          # PR番号を取得
           PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
-          # コミットメッセージを取得して出力
           gh api repos/${{ github.repository }}/pulls/$PR_NUMBER/commits \
             --jq '.[].commit.message' > commit_messages.txt
-          echo "Found commits:"
-          cat commit_messages.txt
+          echo "Found commits:"; cat commit_messages.txt
 
       - name: Check for forbidden strings
         id: check
         run: |
-          if grep -qi "WIP" commit_messages.txt; then
+          if grep -Eiq "WIP|FIXME|temp" commit_messages.txt; then
             echo "found=true" >> $GITHUB_OUTPUT
           else
             echo "found=false" >> $GITHUB_OUTPUT
@@ -33,9 +36,9 @@ jobs:
 
       - name: Comment on PR if needed
         if: steps.check.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}   # ← ここにも付ける
         run: |
           PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
           gh api repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
-            -f body='⚠️ **警告:** コミットメッセージに "WIP" が含まれています。レビュー前に修正してください。'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            -f body='⚠️ **警告:** コミットメッセージに禁止語が含まれています。レビュー前に修正してください。'
