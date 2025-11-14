@@ -6,8 +6,8 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write   # PRにコメントするのに必要
-  issues: write          # 念のため（コメントAPIはissuesスコープ）
+  pull-requests: write
+  issues: write
 
 jobs:
   check_commits:
@@ -18,18 +18,33 @@ jobs:
       - name: Get PR commits
         id: commits
         env:
-          GH_TOKEN: ${{ github.token }}   # ← これがポイント
+          GH_TOKEN: ${{ github.token }}
         run: |
           PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
           gh api repos/${{ github.repository }}/pulls/$PR_NUMBER/commits \
             --jq '.[].commit.message' > commit_messages.txt
           echo "Found commits:"; cat commit_messages.txt
 
-      - name: Check for forbidden strings
+      - name: Check for forbidden strings and create warning message
         id: check
         run: |
-          if grep -Eiq "WIP|FIXME|temp" commit_messages.txt; then
+          warnings=""
+
+          if grep -qi "WIP" commit_messages.txt; then
+            warnings="${warnings}⚠️ **警告:** コミットメッセージに 'WIP' が含まれています。作業途中のままではありませんか？%0A"
+          fi
+
+          if grep -qi "FIXME" commit_messages.txt; then
+            warnings="${warnings}⚠️ **警告:** 'FIXME' が含まれています。修正漏れがないか確認してください。%0A"
+          fi
+
+          if grep -qi "temp" commit_messages.txt; then
+            warnings="${warnings}⚠️ **警告:** 'temp' が含まれています。一時的なコードやメッセージを削除してください。%0A"
+          fi
+
+          if [ -n "$warnings" ]; then
             echo "found=true" >> $GITHUB_OUTPUT
+            echo "warnings=$warnings" >> $GITHUB_OUTPUT
           else
             echo "found=false" >> $GITHUB_OUTPUT
           fi
@@ -37,8 +52,8 @@ jobs:
       - name: Comment on PR if needed
         if: steps.check.outputs.found == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}   # ← ここにも付ける
+          GH_TOKEN: ${{ github.token }}
         run: |
           PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
           gh api repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
-            -f body='⚠️ **警告:** コミットメッセージに禁止語が含まれています。レビュー前に修正してください。'
+            -f body="${{ steps.check.outputs.warnings }}"
