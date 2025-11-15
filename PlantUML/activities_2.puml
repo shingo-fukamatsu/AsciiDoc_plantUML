@@ -1,0 +1,50 @@
+@startuml voice command
+start
+:音声コマンドを認識;
+if(発話席) then (Rr席)
+    :この席からこの機能は使用できません;
+    stop
+else (Fr席)
+endif
+
+if (発話内容) 
+    if() then (休みたいな)
+        :雑談を実施。\nモード提案しない; 
+        stop
+    else(疲れたな\n盛り上がりたいな)
+        switch (モード提案)
+            case (モード提案を許可)
+                (A)
+                detach
+            case (モード提案を不許可\nまたは応答なし)
+                stop
+            case (提案したいモードが\n既に実行中)
+                :「xxモードを\nしばらく続けましょう」と発話;
+                stop
+            case (提案したいモードが\n実行不可)
+                :雑談を実施。\nモード提案しない;
+                stop
+        endswitch
+    endif
+endif
+
+(A)
+if(バッテリ残容量) then (黄信号)
+    if(モード継続するか確認) then (継続を選択)
+    else (終了を選択\n応答なし)
+        stop
+    endif
+else (青信号)
+endif
+
+if(ディスプレイ格納状態) then (半格納\n半格納に稼働中)
+    if(全開にするか確認) then (不許可\n応答なし)
+        stop
+    else (許可)
+        :全開にする;
+    endif
+else (全開\n全開に稼働中)
+endif
+:全開になるまで待つ;
+stop
+@enduml
