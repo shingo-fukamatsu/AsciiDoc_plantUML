@@ -31,20 +31,20 @@ jobs:
           lines=()
 
           if grep -qi "WIP" commit_messages.txt; then
-            lines+=("- [ ] ⚠️ **WIP**: コミットメッセージに 'WIP' が含まれています。作業途中のままではありませんか？")
+            lines+=("- [ ] **WIP**: コミットメッセージに 'WIP' が含まれています。作業途中のままではありませんか？")
           fi
           if grep -qi "FIXME" commit_messages.txt; then
-            lines+=("- [ ] ⚠️ **FIXME**: 'FIXME' が含まれています。修正漏れがないか確認してください。")
+            lines+=("- [ ] **FIXME**: 'FIXME' が含まれています。修正漏れがないか確認してください。")
           fi
           if grep -qi "temp" commit_messages.txt; then
-            lines+=("- [ ] ⚠️ **temp**: 'temp' が含まれています。一時的なコードやメッセージを削除してください。")
+            lines+=("- [ ] **temp**: 'temp' が含まれています。一時的なコードやメッセージを削除してください。")
           fi
 
           if [ ${#lines[@]} -gt 0 ]; then
             {
               echo "found=true"
               echo "warnings<<__WARNINGS__"
-              echo "### 🚨 他要求に影響する可能性がある要求IDが変更されました"
+              echo "### ⚠️ 他要求に影響する可能性がある要求IDが変更されました"
               printf '%s\n' "${lines[@]}"
               echo "__WARNINGS__"
             } >> "$GITHUB_OUTPUT"
@@ -63,7 +63,7 @@ jobs:
             --method POST \
             --raw-field body="${{ steps.check.outputs.warnings }}"
 
-      # ⭐ ジョブ成功のまま警告だけ出す
+      # Actions画面のSummaryにも表示
       - name: Emit warnings (but do not fail)
         if: steps.check.outputs.found == 'true'
         run: |
