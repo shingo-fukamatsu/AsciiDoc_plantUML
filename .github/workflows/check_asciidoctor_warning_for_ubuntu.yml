@@ -11,7 +11,7 @@ jobs:
       - name: Install ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 'latest'
+          ruby-version: '3.3'
       - name: Install asciidoctor
         run: | 
           # sudo apt update
