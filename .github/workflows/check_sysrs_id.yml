@@ -41,6 +41,7 @@ jobs:
             lines+=("- [ ] **temp**: 'temp' が含まれています。一時的なコードやメッセージを削除してください。")
           fi
           # 🔼 ここにチェックパターンとメッセージを記入
+
           if [ ${#lines[@]} -gt 0 ]; then
             {
               echo "found=true"
