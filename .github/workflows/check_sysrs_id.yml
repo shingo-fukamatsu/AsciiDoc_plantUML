@@ -30,13 +30,13 @@ jobs:
         run: |
           lines=()
 
-          if grep -qi "WIP" commit_messages.txt; then
+          if grep -qi 'WIP' commit_messages.txt; then
             lines+=("- [ ] **WIP**: コミットメッセージに 'WIP' が含まれています。作業途中のままではありませんか？")
           fi
-          if grep -qi "FIXME" commit_messages.txt; then
+          if grep -qi 'FIXME' commit_messages.txt; then
             lines+=("- [ ] **FIXME**: 'FIXME' が含まれています。修正漏れがないか確認してください。")
           fi
-          if grep -qi "temp" commit_messages.txt; then
+          if grep -qi 'temp' commit_messages.txt; then
             lines+=("- [ ] **temp**: 'temp' が含まれています。一時的なコードやメッセージを削除してください。")
           fi
 
@@ -62,9 +62,3 @@ jobs:
           gh api repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
             --method POST \
             --raw-field body="${{ steps.check.outputs.warnings }}"
-
-      # Actions画面のSummaryにも表示
-      - name: Emit warnings (but do not fail)
-        if: steps.check.outputs.found == 'true'
-        run: |
-          echo "::warning::他要求に影響する可能性がある要求IDが変更されました。PR コメントを確認してください。"
