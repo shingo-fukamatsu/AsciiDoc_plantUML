@@ -37,7 +37,7 @@ jobs:
           if grep -qi 'FIXME' commit_messages.txt; then
             lines+=("- [ ] **FIXME**: 'FIXME' が含まれています。修正漏れがないか確認してください。")
           fi
-          if grep -qi 'tem*.' commit_messages.txt; then
+          if grep -qiE 'tem*.' commit_messages.txt; then
             lines+=("- [ ] **temp**: 'temp' が含まれています。一時的なコードやメッセージを削除してください。")
           fi
           # 🔼 ここにチェックパターンとメッセージを記入
