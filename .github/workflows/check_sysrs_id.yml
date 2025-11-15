@@ -1,4 +1,4 @@
-name: Check Commit Messages
+name: Check Requirement Impact
 
 on:
   pull_request:
@@ -25,7 +25,7 @@ jobs:
             --jq '.[].commit.message' > commit_messages.txt
           echo "Found commits:"; cat commit_messages.txt
 
-      - name: Check for forbidden strings and create warning message
+      - name: Check Requirement Impact in commit messages
         id: check
         run: |
           lines=()
@@ -44,7 +44,7 @@ jobs:
             {
               echo "found=true"
               echo "warnings<<__WARNINGS__"
-              echo "### 🚨 コミットメッセージ警告チェックリスト"
+              echo "### 🚨 他要求に影響する可能性がある要求IDが変更されました"
               printf '%s\n' "${lines[@]}"
               echo "__WARNINGS__"
             } >> "$GITHUB_OUTPUT"
@@ -62,3 +62,9 @@ jobs:
           gh api repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
             --method POST \
             --raw-field body="${{ steps.check.outputs.warnings }}"
+
+      # ⭐ ジョブ成功のまま警告だけ出す
+      - name: Emit warnings (but do not fail)
+        if: steps.check.outputs.found == 'true'
+        run: |
+          echo "::warning::他要求に影響する可能性がある要求IDが変更されました。PR コメントを確認してください。"
