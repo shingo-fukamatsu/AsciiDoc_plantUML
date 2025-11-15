@@ -1,0 +1,66 @@
+name: Check Requirement Impact
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  check_commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get PR commits
+        id: commits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
+          gh api repos/${{ github.repository }}/pulls/$PR_NUMBER/commits \
+            --jq '.[].commit.message' > commit_messages.txt
+          echo "Found commits:"; cat commit_messages.txt
+
+      - name: Check Requirement Impact in commit messages
+        id: check
+        run: |
+          lines=()
+          # 🔽 ここにチェックパターンとメッセージを記入
+          # 正規表現でチェックパターンを書く場合は「-qi」→「-qiE」に変更してください
+          if grep -qi 'WIP' commit_messages.txt; then
+            lines+=("- [ ] **WIP**: コミットメッセージに 'WIP' が含まれています。作業途中のままではありませんか？")
+          fi
+          if grep -qi 'FIXME' commit_messages.txt; then
+            lines+=("- [ ] **FIXME**: 'FIXME' が含まれています。修正漏れがないか確認してください。")
+          fi
+          if grep -qiE 'tem*.' commit_messages.txt; then
+            lines+=("- [ ] **temp**: 'temp' が含まれています。一時的なコードやメッセージを削除してください。")
+          fi
+          # 🔼 ここにチェックパターンとメッセージを記入
+
+          if [ ${#lines[@]} -gt 0 ]; then
+            {
+              echo "found=true"
+              echo "warnings<<__WARNINGS__"
+              echo "### ⚠️ 他要求に影響する可能性がある要求IDが変更されました"
+              printf '%s\n' "${lines[@]}"
+              echo "__WARNINGS__"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Comment on PR if needed
+        if: steps.check.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER=$(jq -r .pull_request.number "$GITHUB_EVENT_PATH")
+          # --raw-field を使うと改行を含む本文をそのまま送れます
+          gh api repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
+            --method POST \
+            --raw-field body="${{ steps.check.outputs.warnings }}"
